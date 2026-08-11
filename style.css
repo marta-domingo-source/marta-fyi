@@ -1,0 +1,445 @@
+/* ==========================================================================
+   marta.fyi
+   Structure borrowed from an Are.na *profile* page: a title row, three control
+   columns (Info / View / Order), then a grid of square cards.
+
+   The interactions are CSS, not script:
+     · View     — radio + :has() hides the cards that don't match.
+     · Order    — each card carries a rank per sort mode as an inline custom
+                  property; the checked radio decides which one feeds `order`.
+                  (Inline custom properties can't be overridden by a stylesheet,
+                  so the switchable thing must be WHICH property is read, never
+                  the value itself.)
+     · Pop-ups  — :target. Clicking a square shows the matching .modal.
+
+   The single exception is the Random order, which needs ~10 lines of script at
+   the foot of index.html because CSS has no source of randomness. Everything
+   else works with scripting disabled; Random just falls back to Featured.
+
+   No motion. No font files — Are.na's "areal" is an Arial-metric clone, so
+   this stack IS the look.
+   ========================================================================== */
+
+
+/* Tokens ------------------------------------------------------------------ */
+
+:root {
+  /* Are.na's ramp, recorded in full. --gray4, --red1 and --green1 aren't read
+     by anything yet; they're here so the source palette stays complete. */
+  --gray0: #ffffff;  --gray1: #f7f7f7;  --gray2: #ededed;  --gray3: #dedede;
+  --gray4: #999999;  --gray5: #696969;  --gray6: #333333;  --gray7: #000000;
+
+  /* Are.na's two accents. Here they mean category, not privacy. */
+  --red1:   #faf4f3;  --red2:   #dfbebe;  --red3:   #b93d3d;
+  --green1: #f4f8f3;  --green2: #b4d6b3;  --green3: #238020;
+
+  --bg:     var(--gray0);
+  --fg:     var(--gray7);
+  --muted:  var(--gray5);
+  --opt:    var(--gray6);   /* View / Order option text */
+  --line:   var(--gray2);
+  --line-2: var(--gray3);
+  --fill:   var(--gray1);
+
+  /* Are.na's 5px scale */
+  --s1: 5px;  --s2: 10px;  --s3: 15px;  --s4: 20px;  --s5: 25px;
+  --s6: 35px; --s7: 45px;  --s8: 65px;  --s9: 80px;  --s10: 100px; --s11: 130px;
+
+  --fs-meta:  0.78125rem;   /* 12.5px */
+  --fs-body:  1rem;         /* Are.na's default */
+  --fs-card:  1.75rem;
+  --fs-title: 2rem;
+
+  /* Are.na's profile is a FOUR column grid: the cards sit on it, and the three
+     control columns occupy the first three of them. Nearly full-bleed, capped
+     so cards don't become absurd on a huge display. */
+  --page: 120rem;
+  --cols: 4;
+
+  --radius: 3px;
+  --scrim: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000; --fg: #fff;
+    --muted: #9a9a9a; --opt: #dcdcdc;
+    --line: #262626; --line-2: #383838; --fill: #0e0e0e;
+    --red3: #e58b8b;  --red2:   #4a2a2a;
+    --green3: #86c383; --green2: #244722;
+    /* the sheet is black too in dark mode, so the scrim has to work harder */
+    --scrim: rgba(0, 0, 0, 0.7);
+  }
+}
+
+
+/* Base -------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: var(--fs-body)/1.45 Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; font-size: inherit; font-weight: inherit; }
+p, ul, ol, dl, dd { margin: 0; }
+ul, ol { list-style: none; padding: 0; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--muted); }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: var(--radius); }
+
+img { display: block; width: 100%; height: auto; }
+
+.page { max-width: var(--page); margin-inline: auto; padding: 0 var(--s9) var(--s10); }
+
+/* Radios drive View and Order. Off-screen, not display:none, so they stay
+   focusable and keyboard-operable. */
+.control-input {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* Title row --------------------------------------------------------------- */
+
+.titlerow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s4);
+  padding: var(--s8) 0 var(--s9);
+}
+
+.title { font-size: var(--fs-title); font-weight: bold; line-height: 1.1; }
+
+/* "More" — a native disclosure, so it needs no script. */
+.more { font-size: var(--fs-meta); }
+.more > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: var(--s1) var(--s3);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  font-weight: bold;
+}
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary::after { content: " ⌄"; color: var(--muted); }
+.more[open] > summary::after { content: " ⌃"; }
+.more ul {
+  padding-top: var(--s2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  text-align: right;
+}
+.more a { text-decoration: underline; text-underline-offset: 2px; }
+
+
+/* Control columns: Info / View / Order ------------------------------------ */
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--s4);
+  padding-bottom: var(--s11);
+}
+
+/* Column heading: grey, regular weight, on a light hairline. */
+.controls h2 {
+  font-weight: normal;
+  color: var(--muted);
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--s4);
+}
+
+/* --- Info: label left, value right, hairline per row --- */
+.info dl { display: grid; grid-template-columns: auto 1fr; }
+.info dt, .info dd {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+.info dd { text-align: right; }
+/* Values that are actions read bold and dark, the way Are.na's "View all" does. */
+.info dd a {
+  color: var(--opt);
+  font-weight: bold;
+  text-decoration: none;
+}
+.info dd a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 2px; }
+.info .bio { padding-bottom: var(--s4); }
+
+/* --- View / Order ---
+   Every option looks the same: bold, dark. Selection is marked ONLY by a dot to
+   the left of the tick — no weight or colour change, which is what Are.na does.
+   The left padding on the list is the room that dot sits in. */
+.optlist { padding-left: 14px; }
+
+.optlist li { position: relative; }
+
+/* the light tick, inset top and bottom so the ticks read as segments */
+.optlist li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 3px; bottom: 3px;
+  width: 3px;
+  background: var(--line);
+}
+
+/* the selection dot */
+.optlist li:has(:checked)::after {
+  content: "";
+  position: absolute;
+  left: -11px; top: 50%;
+  translate: 0 -50%;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--opt);
+}
+
+.optlist label {
+  display: block;
+  padding-left: var(--s3);
+  color: var(--opt);
+  font-weight: bold;
+  cursor: pointer;
+}
+.optlist label:hover { color: var(--fg); }
+
+
+
+/* Card grid --------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--s4);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--s2);
+  aspect-ratio: 1 / 1;
+  padding: var(--s5);
+  text-align: center;
+  border: 1px solid var(--line-2);
+  background: var(--bg);
+}
+.card:hover { background: var(--fill); color: inherit; }
+
+.card .t { font-size: var(--fs-card); line-height: 1.1; }
+.card .m { font-size: var(--fs-body); line-height: 1.5; }
+.card .m b { font-weight: bold; }
+.card .m span { display: block; }
+
+/* Category colour. Are.na uses these for privacy; here they mark what a card
+   is, which is also what View filters on. */
+.grid > li[data-sec="writing"]  .card { border-color: var(--green2); color: var(--green3); }
+.grid > li[data-sec="teaching"] .card { border-color: var(--red2);   color: var(--red3);   }
+
+
+/* View — hide what doesn't match ----------------------------------------- */
+
+/* Hide the <li>, not the .card — hiding the card would leave an empty cell. */
+.page:has(#view-currently:checked)  .grid > li:not([data-sec="currently"]),
+.page:has(#view-projects:checked)   .grid > li:not([data-sec="projects"]),
+.page:has(#view-experience:checked) .grid > li:not([data-sec="experience"]),
+.page:has(#view-teaching:checked)   .grid > li:not([data-sec="teaching"]),
+.page:has(#view-writing:checked)    .grid > li:not([data-sec="writing"]) {
+  display: none;
+}
+
+
+/* Order — choose which rank feeds `order` -------------------------------- */
+/* Default (Featured) is document order, so no rule is needed for it. */
+
+/* `order` applies to grid items, so it must target the <li>. */
+.page:has(#order-new:checked)   .grid > li { order: var(--o-new); }
+.page:has(#order-old:checked)   .grid > li { order: var(--o-old); }
+.page:has(#order-az:checked)     .grid > li { order: var(--o-az); }
+/* --o-rnd is written by the one small script at the foot of index.html. If it
+   never runs, this resolves to 0 for every card, i.e. document order. */
+.page:has(#order-random:checked) .grid > li { order: var(--o-rnd, 0); }
+
+
+/* Narrow ------------------------------------------------------------------ */
+
+/* --cols drives the card grid and the control columns together, so the two
+   stay aligned at every width. */
+@media (max-width: 1400px) { :root { --cols: 3; } }
+
+@media (max-width: 1000px) {
+  :root { --cols: 2; }
+  .page { padding-inline: var(--s6); }
+  .controls { grid-template-columns: 1fr; gap: var(--s6); padding-bottom: var(--s8); }
+  .titlerow { padding: var(--s5) 0 var(--s6); }
+}
+
+@media (max-width: 620px) {
+  :root { --fs-title: 1.5rem; --fs-card: 1.2rem; }
+  .page { padding-inline: var(--s3); }
+  .grid { gap: var(--s2); }
+  .card { padding: var(--s3); }
+}
+
+
+/* Print ------------------------------------------------------------------- */
+
+@media print {
+  :root { --bg: #fff; --fg: #000; --muted: #444; --line: #ccc; --line-2: #999; }
+  .more, .view, .order, .modal { display: none; }
+  .card { break-inside: avoid; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+
+/* Pop-ups ----------------------------------------------------------------- */
+/* :target, so clicking a square needs no script. The back button closes it,
+   which is the behaviour people already expect from a URL change.
+
+   Known limits of doing this without script: Escape doesn't close, and focus
+   isn't trapped inside the sheet. Swap in <dialog> if either matters. */
+
+.modal { display: none; }
+
+.modal:target {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  padding: var(--s4);
+}
+
+/* Stop the page behind from scrolling while a pop-up is open. */
+body:has(.modal:target) { overflow: hidden; }
+
+.modal .backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+}
+
+.modal .sheet {
+  position: relative;
+  width: min(52rem, 100%);
+  max-height: 86vh;
+  overflow: auto;
+  padding: var(--s6);
+  background: var(--bg);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+}
+
+.modal .close {
+  float: right;
+  margin-left: var(--s4);
+  font-size: var(--fs-meta);
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.modal .meta { font-size: var(--fs-meta); color: var(--muted); }
+.modal h2 {
+  font-size: var(--fs-card);
+  line-height: 1.15;
+  margin: var(--s1) 0 var(--s4);
+}
+.modal .prose { max-width: 34rem; }
+.modal .prose p + p { margin-top: var(--s3); }
+
+.modal .visuals {
+  display: grid;
+  /* auto-FIT, not auto-fill: with two visuals in a wide sheet, auto-fill leaves
+     an empty third track and the pair looks stranded. auto-fit collapses it. */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--s2);
+  margin-top: var(--s5);
+}
+.modal .frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--fill);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.modal .frame::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.modal .frame:has(img)::after { content: none; }
+.modal figure { margin: 0; }
+.modal figcaption {
+  margin-top: var(--s1);
+  font-size: var(--fs-meta);
+  color: var(--muted);
+}
+
+@media (max-width: 620px) {
+  .modal:target { padding: var(--s2); }
+  .modal .sheet { padding: var(--s4); max-height: 92vh; }
+  .modal .visuals { grid-template-columns: 1fr; }
+}
+
+
+/* Roles, inside the Experience pop-up ------------------------------------- */
+
+.roles > li {
+  padding-top: var(--s5);
+  padding-bottom: var(--s5);
+  border-top: 1px solid var(--line);
+  max-width: 42rem;
+}
+.roles > li:first-child { border-top: 0; padding-top: var(--s2); }
+.roles > li:last-child  { padding-bottom: 0; }
+
+.role h3 { font-size: var(--fs-body); font-weight: bold; }
+
+.role .org {
+  margin-top: 2px;
+  font-size: var(--fs-meta);
+  color: var(--muted);
+}
+.role .org a { text-decoration: underline; text-underline-offset: 2px; }
+.role .org a:hover { color: var(--fg); }
+
+/* The one-line summary of the role, in full ink. */
+.role .lead { margin-top: var(--s3); }
+
+.role .bullets { margin-top: var(--s2); }
+.role .bullets li {
+  position: relative;
+  padding-left: var(--s3);
+  margin-top: var(--s2);
+  color: var(--muted);
+}
+.role .bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted);
+}

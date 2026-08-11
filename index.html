@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>marta domingo</title>
+<meta name="description" content="Marta Domingo — designer of products, teams and systems.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<!--
+  Interaction, all of it:
+    · View / Order  — radios + :has(). No script.
+    · Clicking a square — opens a pop-up via :target. No script. Each card links
+      to #slug; the matching .modal shows. The back button closes it.
+    · Random — the ONE thing needing script, at the foot of this file. CSS has no
+      source of randomness. Without it, Random behaves as Featured.
+
+  The grid items are the <li>, not the <a class="card"> inside. data-sec and the
+  --o-* ranks must live on the <li>, or sorting silently does nothing and
+  filtering leaves empty cells behind. Every card needs all three ranks.
+
+  Experience is one square holding the whole CV. Its text is Marta's own wording,
+  verbatim, American spellings included — do not "fix" organization/prioritization.
+
+  20XX means there is no date for it yet.
+-->
+
+<body>
+
+<div class="page">
+
+  <div class="titlerow">
+    <h1 class="title">marta domingo</h1>
+
+    <details class="more">
+      <summary>More</summary>
+      <ul>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">GitHub</a></li>
+        <li><a href="#">CV</a></li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="controls">
+
+    <section class="info">
+      <h2>Info</h2>
+      <p class="bio">Designer of products, teams and systems.</p>
+      <dl>
+        <dt>Based</dt><dd>Barcelona</dd>
+        <dt>Now</dt><dd>Design Manager, Miro</dd>
+        <dt>Email</dt><dd><a href="mailto:martadomingorod@gmail.com">martadomingorod@gmail.com</a></dd>
+      </dl>
+    </section>
+
+    <nav class="view" role="group" aria-labelledby="view-h">
+      <h2 id="view-h">View</h2>
+      <ul class="optlist">
+      <li><input class="control-input" type="radio" name="view" id="view-all" checked><label for="view-all">All</label></li>
+      <li><input class="control-input" type="radio" name="view" id="view-currently"><label for="view-currently">Currently</label></li>
+      <li><input class="control-input" type="radio" name="view" id="view-projects"><label for="view-projects">Projects</label></li>
+      <li><input class="control-input" type="radio" name="view" id="view-experience"><label for="view-experience">Experience</label></li>
+      <li><input class="control-input" type="radio" name="view" id="view-teaching"><label for="view-teaching">Teaching</label></li>
+      <li><input class="control-input" type="radio" name="view" id="view-writing"><label for="view-writing">Writing</label></li>
+      </ul>
+    </nav>
+
+    <nav class="order" role="group" aria-labelledby="order-h">
+      <h2 id="order-h">Order</h2>
+      <ul class="optlist">
+      <li><input class="control-input" type="radio" name="order" id="order-featured" checked><label for="order-featured">Featured</label></li>
+      <li><input class="control-input" type="radio" name="order" id="order-new"><label for="order-new">Newest first</label></li>
+      <li><input class="control-input" type="radio" name="order" id="order-old"><label for="order-old">Oldest first</label></li>
+      <li><input class="control-input" type="radio" name="order" id="order-az"><label for="order-az">Alphabetical</label></li>
+      <li><input class="control-input" type="radio" name="order" id="order-random"><label for="order-random">Random</label></li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <main>
+    <ul class="grid" id="grid">
+      <li data-sec="currently"
+          style="--o-new:2;--o-old:10;--o-az:8">
+        <a class="card" href="#now">
+          <span class="t">Now</span>
+          <span class="m"><b>Miro</b><span>What I’m working on</span><span>2026</span></span>
+        </a>
+      </li>
+      <li data-sec="projects"
+          style="--o-new:3;--o-old:11;--o-az:9">
+        <a class="card" href="#project-01">
+          <span class="t">Project 01</span>
+          <span class="m"><b>Miro</b><span>0 visuals</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="projects"
+          style="--o-new:6;--o-old:8;--o-az:10">
+        <a class="card" href="#project-02">
+          <span class="t">Project 02</span>
+          <span class="m"><b>Miro</b><span>0 visuals</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="projects"
+          style="--o-new:11;--o-old:2;--o-az:11">
+        <a class="card" href="#project-03">
+          <span class="t">Project 03</span>
+          <span class="m"><b>HP</b><span>0 visuals</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="experience"
+          style="--o-new:4;--o-old:6;--o-az:3">
+        <a class="card" href="#experience">
+          <span class="t">Experience</span>
+          <span class="m"><b>Miro · HP</b><span>Five roles</span><span>2017 → present</span></span>
+        </a>
+      </li>
+      <li data-sec="teaching"
+          style="--o-new:7;--o-old:5;--o-az:2">
+        <a class="card" href="#elisava">
+          <span class="t">Elisava</span>
+          <span class="m"><b>Director</b><span>Master in Strategic Design</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="teaching"
+          style="--o-new:8;--o-old:4;--o-az:1">
+        <a class="card" href="#bau">
+          <span class="t">BAU</span>
+          <span class="m"><b>Lecturer</b><span>Master in Experience Design</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="teaching"
+          style="--o-new:9;--o-old:3;--o-az:5">
+        <a class="card" href="#massana">
+          <span class="t">Massana</span>
+          <span class="m"><b>Academic advisor</b><span>DHB and Barcelona Activa</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="teaching"
+          style="--o-new:10;--o-old:1;--o-az:4">
+        <a class="card" href="#ied">
+          <span class="t">IED</span>
+          <span class="m"><b>Lecturer</b><span>Master in Interaction Design</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="writing"
+          style="--o-new:1;--o-old:9;--o-az:6">
+        <a class="card" href="#note-01">
+          <span class="t">Note 01</span>
+          <span class="m"><b>Writing</b><span>Untitled</span><span>20XX</span></span>
+        </a>
+      </li>
+      <li data-sec="writing"
+          style="--o-new:5;--o-old:7;--o-az:7">
+        <a class="card" href="#note-02">
+          <span class="t">Note 02</span>
+          <span class="m"><b>Writing</b><span>Untitled</span><span>20XX</span></span>
+        </a>
+      </li>
+    </ul>
+  </main>
+
+</div>
+
+<!-- Pop-ups. Hidden until their id is the URL target. -->
+  <div class="modal" id="now" role="dialog" aria-modal="true" aria-labelledby="now-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Miro · 2026</p>
+      <h2 id="now-h">Now</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="project-01" role="dialog" aria-modal="true" aria-labelledby="project-01-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Miro · 20XX</p>
+      <h2 id="project-01-h">Project 01</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="project-02" role="dialog" aria-modal="true" aria-labelledby="project-02-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Miro · 20XX</p>
+      <h2 id="project-02-h">Project 02</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="project-03" role="dialog" aria-modal="true" aria-labelledby="project-03-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">HP · 20XX</p>
+      <h2 id="project-03-h">Project 03</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="experience" role="dialog" aria-modal="true" aria-labelledby="experience-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Miro · HP · 2017 → present</p>
+      <h2 id="experience-h">Experience</h2>
+      <ul class="roles">
+        <li class="role">
+          <h3>Design Manager</h3>
+          <p class="org"><a href="https://miro.com" rel="noopener">Miro <span aria-hidden="true">↗</span></a> · 2025 – Present</p>
+          <p class="lead">Leading design for core product experiences supporting collaboration for 100M+ users.</p>
+          <ul class="bullets">
+            <li>Lead design for AI-native product experiences, defining the standards and rules that turn generative output into production-ready collaboration workflows.</li>
+            <li>Build the design infrastructure that enables AI across the organization, spanning systems, tooling, evaluation frameworks, and rapid prototyping environments.</li>
+            <li>Establish product-wide design quality through craft leadership, end-to-end UX direction, and scalable review and governance practices.</li>
+          </ul>
+        </li>
+        <li class="role">
+          <h3>Head of Advanced Design</h3>
+          <p class="org"><a href="https://www.hp.com" rel="noopener">HP <span aria-hidden="true">↗</span></a> · 2024 – 2025</p>
+          <p class="lead">Led the Design Lab, connecting early exploration with product strategy and reducing downstream risk.</p>
+          <ul class="bullets">
+            <li>Led multiple teams exploring new markets and product opportunities.</li>
+            <li>Translated early user signals into validated product directions that informed portfolio decisions.</li>
+            <li>Shortened discovery cycles ahead of significant product investment.</li>
+          </ul>
+        </li>
+        <li class="role">
+          <h3>Design Systems Lead</h3>
+          <p class="org"><a href="https://www.hp.com" rel="noopener">HP <span aria-hidden="true">↗</span></a> · 2023</p>
+          <p class="lead">Managed the shift from product-focused design teams to design at scale operations.</p>
+          <ul class="bullets">
+            <li>Led the design and ops of the design system, improving adoption and contributing to a ~40% increase in reuse.</li>
+            <li>Streamlined operations and created shared standards for quality, consistency, and usability, reducing update cycles by ~25%.</li>
+            <li>Defined targets and tracked system impact, helping teams ship faster and more confidently, with improvements in delivery speed and efficiency across product teams.</li>
+          </ul>
+        </li>
+        <li class="role">
+          <h3>Senior Product Designer</h3>
+          <p class="org"><a href="https://www.hp.com" rel="noopener">HP <span aria-hidden="true">↗</span></a> · 2019 – 2023</p>
+          <p class="lead">Led product design across web, mobile, and device experiences, first owning delivery and later expanding into platform-level leadership.</p>
+          <ul class="bullets">
+            <li>Led a team of four designers across multiple product lines, owning design quality, prioritization, and final decisions while shipping multiple products and major iterations under real delivery constraints.</li>
+            <li>Unified a fragmented ecosystem of more than ten applications serving ~36K companies by defining shared platform principles, patterns, and decision frameworks, improving cross-team alignment.</li>
+          </ul>
+        </li>
+        <li class="role">
+          <h3>Product Designer</h3>
+          <p class="org"><a href="https://www.hp.com" rel="noopener">HP <span aria-hidden="true">↗</span></a> · 2017 – 2019</p>
+          <p class="lead">Worked as a designer focused on early exploration, prototyping, and user research to inform future product directions before delivery commitments.</p>
+          <ul class="bullets">
+            <li>Prototyped and tested early concepts to validate assumptions and reduce uncertainty before downstream investment.</li>
+            <li>Ran user experiments that informed later product strategy, even when original concepts did not ship.</li>
+            <li>Helped establish an experimentation-first approach that prioritized speed, signal, and early decision-making.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="elisava" role="dialog" aria-modal="true" aria-labelledby="elisava-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Director · 20XX</p>
+      <h2 id="elisava-h">Elisava</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="bau" role="dialog" aria-modal="true" aria-labelledby="bau-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Lecturer · 20XX</p>
+      <h2 id="bau-h">BAU</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="massana" role="dialog" aria-modal="true" aria-labelledby="massana-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Academic advisor · 20XX</p>
+      <h2 id="massana-h">Massana</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="ied" role="dialog" aria-modal="true" aria-labelledby="ied-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Lecturer · 20XX</p>
+      <h2 id="ied-h">IED</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="note-01" role="dialog" aria-modal="true" aria-labelledby="note-01-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Writing · 20XX</p>
+      <h2 id="note-01-h">Note 01</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="note-02" role="dialog" aria-modal="true" aria-labelledby="note-02-h">
+    <a class="backdrop" href="#grid" aria-label="Close"></a>
+    <div class="sheet">
+      <a class="close" href="#grid">Close</a>
+      <p class="meta">Writing · 20XX</p>
+      <h2 id="note-02-h">Note 02</h2>
+      <div class="prose">
+        <p>Write about it here. What the problem was, what you did, what you would
+          do differently.</p>
+      </div>
+      <ul class="visuals">
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+      </ul>
+    </div>
+  </div>
+
+<script>
+/* The only JavaScript here, and the only thing that needs it: CSS has no source
+   of randomness. Gives each card a random rank for the Random order, and
+   reshuffles every time Random is clicked. With scripting off, Random simply
+   behaves like Featured. */
+(function () {
+  var items = [].slice.call(document.querySelectorAll('.grid > li'));
+  var radio = document.getElementById('order-random');
+  if (!items.length || !radio) return;
+  function shuffle() {
+    var pool = items.map(function (_, i) { return i + 1; });
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    items.forEach(function (li, i) { li.style.setProperty('--o-rnd', pool[i]); });
+  }
+  shuffle();
+  radio.addEventListener('click', shuffle);
+  radio.addEventListener('change', shuffle);
+})();
+</script>
+
+</body>
+</html>
