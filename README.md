@@ -13,10 +13,10 @@ v1-portfolio/   an earlier, abandoned direction — kept for reference
 ## Ground rules
 
 - **Zero dependencies.** No build, no npm, no framework, no CDN, **no font files.**
-- **Almost no JavaScript.** View, Order and the pop-ups are CSS. The one exception is
-  the Random order — about ten inline lines at the foot of `index.html`, because CSS has
-  no source of randomness. With scripting off, Random simply behaves like Featured and
-  nothing else changes.
+- **Two small inline scripts**, for the only two things CSS genuinely can't do:
+  **Random** (no source of randomness) and **Search** (no text matching). Everything else
+  — View, Order, the pop-ups, the More popover — is CSS. With scripting off, Random
+  behaves like Featured and the search box hides itself rather than sitting there dead.
 - **No motion.**
 - Open `index.html` and it works.
 
@@ -31,7 +31,7 @@ the same stack. So `Arial, Helvetica, sans-serif` *is* the look — nothing to d
 | --- | --- |
 | Greys | `#FFF` `#F7F7F7` `#EDEDED` `#DEDEDE` `#999` `#696969` `#333` `#000` |
 | Accents | red `#B93D3D`/`#DFBEBE`, green `#238020`/`#B4D6B3` |
-| Type | 12.5px · 16px · 28px · 32px |
+| Type | 12.5px meta · 14.4px UI · 16px reading · 28px card · 32px title |
 | Spacing | 5px base: 5 / 10 / 15 / 20 / 25 / 35 / 45 / 65 / 80 / 100 / 130 |
 | Borders | `1px solid` |
 | Radius | 3px |
@@ -59,10 +59,10 @@ The page is near-full-bleed with 80px side padding, capped at `--page` (120rem) 
 don't become absurd on a very large display. At 1920px that gives 425px squares, which is
 what the reference has.
 
-**Selection is marked by a dot and nothing else** — no weight or colour change on the
-selected View/Order option, which is what Are.na does. Every option is bold and `#333`; the
-light 3px tick to the left of each is inset top and bottom so the ticks read as segments
-rather than one continuous rule.
+**Selection** is three things at once, which is what Are.na does: a dot at the far left, the
+selected row's segment of the tick rail darkened to `#696969`, and the label a shade darker
+(`#000` against `#333`). The rail is *continuous* — the per-item bars butt together with no
+inset, so it reads as one line with a highlighted spot rather than a row of dashes.
 
 ## How the interactions work
 
@@ -95,15 +95,40 @@ Three things to know before editing:
 The radios are positioned off-screen at 1×1px with `opacity: 0` rather than
 `display: none`, so they stay keyboard-focusable.
 
-**Pop-ups use `:target`.** Each card links to `#slug`; the matching `.modal` is
-`display: none` until it's the URL target. `body:has(.modal:target) { overflow: hidden }`
-stops the page behind from scrolling, and Close links point at `#grid` so closing returns
-you to the grid rather than the top of the page. The back button closes a pop-up, which is
-what a URL change should do.
+**Search** matches each card's own text *and* everything in the pop-up behind it — the
+description and the fact rows included. So "governance" finds Experience even though the
+card never says the word, and "strategic design and innovation" finds Elisava from a fact
+row alone. It marks
+non-matches with a `data-nomatch` attribute rather than an inline `display`, because an
+inline style would beat the View filter's stylesheet rule and the two would fight; as
+attributes they compose. Escape clears the field. It searches the cards and their pop-ups,
+not the Info column.
 
-Two things this approach doesn't give you, both fixable only with script: **Escape doesn't
-close**, and **focus isn't trapped** inside the sheet. Swap in `<dialog>` if either
-matters more than staying script-free.
+**`More` is a popover** — a native `<details>` whose `<ul>` is absolutely positioned, so it
+floats over the page instead of pushing it down. No script.
+
+**Pop-ups** follow the structure of Are.na's block detail: a large **content pane** on the
+left and a **metadata sidebar** on the right, in a sheet that nearly fills the viewport.
+
+| | |
+| --- | --- |
+| Pane | whatever the substantial content is — the visuals, or long-form like the CV |
+| Sidebar | prev / next / close, title, a description, then label-value fact rows |
+
+At 1700px that's a 1182px pane beside a 415px sidebar. Below 900px they stack, **sidebar
+first**, so the title and description arrive before a screenful of images.
+
+The pane centres short content with `margin-block: auto` on its child rather than
+`justify-content: center`, because auto margins collapse to zero when the content is taller
+than the pane, where centring would clip the top and make it unreachable.
+
+They work on `:target`, so opening and closing needs no script and the back button closes
+them. Close links point at `#grid` so closing returns you to the grid rather than the top of
+the page. **Prev/next walk document order**, not whatever Order is currently selected — they
+are static links generated per card, and they wrap around at both ends.
+
+Two limits of doing this without script: **Escape doesn't close**, and **focus isn't
+trapped** in the sheet. Swap in `<dialog>` if either matters more than staying script-free.
 
 ## Experience is one square
 
