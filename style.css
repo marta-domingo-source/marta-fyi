@@ -24,8 +24,9 @@
 /* Tokens ------------------------------------------------------------------ */
 
 :root {
-  /* Are.na's ramp, recorded in full. --gray4, --red1 and --green1 aren't read
-     by anything yet; they're here so the source palette stays complete. */
+  /* Are.na's ramp, recorded in full. --gray4, --red1 and the three greens
+     aren't read by anything yet; they're here so the source palette stays
+     complete. */
   --gray0: #ffffff;  --gray1: #f7f7f7;  --gray2: #ededed;  --gray3: #dedede;
   --gray4: #999999;  --gray5: #696969;  --gray6: #333333;  --gray7: #000000;
 
@@ -306,10 +307,11 @@ img { display: block; width: 100%; height: auto; }
 .card .m b { font-weight: bold; }
 .card .m span { display: block; }
 
-/* Category colour. Are.na uses these for privacy; here they mark what a card
-   is, which is also what View filters on. */
-.grid > li[data-sec="writing"]  .card { border-color: var(--green2); color: var(--green3); }
-.grid > li[data-sec="teaching"] .card { border-color: var(--red2);   color: var(--red3);   }
+/* Category colour. Are.na uses these for privacy; here it marks a card that
+   isn't quite like its neighbours. Keyed off data-accent, not data-sec, because
+   Teaching shares the experience section with Experience but still wants to read
+   as a different kind of thing. */
+.grid > li[data-accent="red"] .card { border-color: var(--red2); color: var(--red3); }
 
 
 /* View — hide what doesn't match ----------------------------------------- */
@@ -322,8 +324,7 @@ img { display: block; width: 100%; height: auto; }
 .page:has(#view-currently:checked)  .grid > li:not([data-sec="currently"]),
 .page:has(#view-projects:checked)   .grid > li:not([data-sec="projects"]),
 .page:has(#view-experience:checked) .grid > li:not([data-sec="experience"]),
-.page:has(#view-teaching:checked)   .grid > li:not([data-sec="teaching"]),
-.page:has(#view-writing:checked)    .grid > li:not([data-sec="writing"]) {
+.page:has(#view-about:checked)      .grid > li:not([data-sec="about"]) {
   display: none;
 }
 
@@ -561,6 +562,14 @@ body:has(.modal:target) { overflow: hidden; }
   border-radius: 50%;
   background: var(--muted);
 }
+
+
+/* Prose, for the About pop-up's pane -------------------------------------- */
+/* Same measure as .roles, so the two panes read at the same width. */
+
+.prose { max-width: 44rem; margin-inline: auto; }
+.prose p { font-size: var(--fs-read); line-height: 1.55; }
+.prose p + p { margin-top: var(--s3); }
 
 
 /* Pop-ups, narrow --------------------------------------------------------- */

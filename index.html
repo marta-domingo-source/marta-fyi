@@ -15,15 +15,18 @@
     · View / Order  — radios + :has(). No script.
     · Clicking a square — opens a pop-up via :target. No script. Each card links
       to #slug; the matching .modal shows. The back button closes it.
-    · Random — the ONE thing needing script, at the foot of this file. CSS has no
-      source of randomness. Without it, Random behaves as Featured.
+    · Random and Search — the only two things needing script, at the foot of this
+      file. CSS has no source of randomness and can't match text. Without them,
+      Random behaves as Featured and the search box stays hidden.
 
   The grid items are the <li>, not the <a class="card"> inside. data-sec and the
   --o-* ranks must live on the <li>, or sorting silently does nothing and
   filtering leaves empty cells behind. Every card needs all three ranks.
 
-  Experience is one square holding the whole CV. Its text is Marta's own wording,
-  verbatim, American spellings included — do not "fix" organization/prioritization.
+  Experience and Teaching are each one square holding the whole list, and both
+  sit in the experience section — Teaching is not its own View option. The
+  Experience text is Marta's own wording, verbatim, American spellings included
+  — do not "fix" organization/prioritization.
 
   20XX means there is no date for it yet.
 -->
@@ -77,8 +80,7 @@
       <li><input class="control-input" type="radio" name="view" id="view-currently"><label for="view-currently">Currently</label></li>
       <li><input class="control-input" type="radio" name="view" id="view-projects"><label for="view-projects">Projects</label></li>
       <li><input class="control-input" type="radio" name="view" id="view-experience"><label for="view-experience">Experience</label></li>
-      <li><input class="control-input" type="radio" name="view" id="view-teaching"><label for="view-teaching">Teaching</label></li>
-      <li><input class="control-input" type="radio" name="view" id="view-writing"><label for="view-writing">Writing</label></li>
+      <li><input class="control-input" type="radio" name="view" id="view-about"><label for="view-about">About</label></li>
       </ul>
     </nav>
 
@@ -99,80 +101,53 @@
     <p class="noresults">No matches.</p>
     <ul class="grid" id="grid">
       <li data-sec="currently"
-          style="--o-new:2;--o-old:10;--o-az:8">
+          style="--o-new:1;--o-old:6;--o-az:3">
         <a class="card" href="#now">
           <span class="t">Now</span>
           <span class="m"><b>Miro</b><span>What I’m working on</span><span>2026</span></span>
         </a>
       </li>
       <li data-sec="projects"
-          style="--o-new:3;--o-old:11;--o-az:9">
+          style="--o-new:4;--o-old:3;--o-az:4">
         <a class="card" href="#project-01">
           <span class="t">Project 01</span>
           <span class="m"><b>Miro</b><span>0 visuals</span><span>20XX</span></span>
         </a>
       </li>
       <li data-sec="projects"
-          style="--o-new:6;--o-old:8;--o-az:10">
+          style="--o-new:5;--o-old:2;--o-az:5">
         <a class="card" href="#project-02">
           <span class="t">Project 02</span>
           <span class="m"><b>Miro</b><span>0 visuals</span><span>20XX</span></span>
         </a>
       </li>
       <li data-sec="projects"
-          style="--o-new:11;--o-old:2;--o-az:11">
+          style="--o-new:6;--o-old:1;--o-az:6">
         <a class="card" href="#project-03">
           <span class="t">Project 03</span>
           <span class="m"><b>HP</b><span>0 visuals</span><span>20XX</span></span>
         </a>
       </li>
       <li data-sec="experience"
-          style="--o-new:4;--o-old:6;--o-az:3">
+          style="--o-new:2;--o-old:5;--o-az:2">
         <a class="card" href="#experience">
           <span class="t">Experience</span>
           <span class="m"><b>Miro · HP</b><span>Five roles</span><span>2017 → present</span></span>
         </a>
       </li>
-      <li data-sec="teaching"
-          style="--o-new:7;--o-old:5;--o-az:2">
-        <a class="card" href="#elisava">
-          <span class="t">Elisava</span>
-          <span class="m"><b>Director</b><span>Master in Strategic Design</span><span>20XX</span></span>
+      <!-- Teaching sits in the experience section: one square, no View option. -->
+      <li data-sec="experience" data-accent="red"
+          style="--o-new:3;--o-old:4;--o-az:7">
+        <a class="card" href="#teaching">
+          <span class="t">Teaching</span>
+          <span class="m"><b>Elisava · BAU · Massana · IED</b><span>Four schools</span><span>20XX</span></span>
         </a>
       </li>
-      <li data-sec="teaching"
-          style="--o-new:8;--o-old:4;--o-az:1">
-        <a class="card" href="#bau">
-          <span class="t">BAU</span>
-          <span class="m"><b>Lecturer</b><span>Master in Experience Design</span><span>20XX</span></span>
-        </a>
-      </li>
-      <li data-sec="teaching"
-          style="--o-new:9;--o-old:3;--o-az:5">
-        <a class="card" href="#massana">
-          <span class="t">Massana</span>
-          <span class="m"><b>Academic advisor</b><span>DHB and Barcelona Activa</span><span>20XX</span></span>
-        </a>
-      </li>
-      <li data-sec="teaching"
-          style="--o-new:10;--o-old:1;--o-az:4">
-        <a class="card" href="#ied">
-          <span class="t">IED</span>
-          <span class="m"><b>Lecturer</b><span>Master in Interaction Design</span><span>20XX</span></span>
-        </a>
-      </li>
-      <li data-sec="writing"
-          style="--o-new:1;--o-old:9;--o-az:6">
-        <a class="card" href="#note-01">
-          <span class="t">Note 01</span>
-          <span class="m"><b>Writing</b><span>Untitled</span><span>20XX</span></span>
-        </a>
-      </li>
-      <li data-sec="writing"
-          style="--o-new:5;--o-old:7;--o-az:7">
-        <a class="card" href="#note-02">
-          <span class="t">Note 02</span>
-          <span class="m"><b>Writing</b><span>Untitled</span><span>20XX</span></span>
+      <li data-sec="about"
+          style="--o-new:7;--o-old:7;--o-az:1">
+        <a class="card" href="#about">
+          <span class="t">About</span>
+          <span class="m"><b>Barcelona</b><span>Designer of products, teams and systems</span></span>
         </a>
       </li>
     </ul>
@@ -194,7 +169,7 @@
 
       <aside class="side">
         <nav class="sidenav">
-          <a href="#note-02" aria-label="Previous">‹</a>
+          <a href="#about" aria-label="Previous">‹</a>
           <a href="#project-01" aria-label="Next">›</a>
           <a href="#grid" aria-label="Close">×</a>
         </nav>
@@ -353,7 +328,7 @@
       <aside class="side">
         <nav class="sidenav">
           <a href="#project-03" aria-label="Previous">‹</a>
-          <a href="#elisava" aria-label="Next">›</a>
+          <a href="#teaching" aria-label="Next">›</a>
           <a href="#grid" aria-label="Close">×</a>
         </nav>
         <h2 id="experience-h">Experience</h2>
@@ -367,171 +342,81 @@
 
     </div>
   </div>
-  <div class="modal" id="elisava" role="dialog" aria-modal="true" aria-labelledby="elisava-h">
+  <!-- Teaching: the four schools as one block, same shape as Experience. -->
+  <div class="modal" id="teaching" role="dialog" aria-modal="true" aria-labelledby="teaching-h">
     <a class="backdrop" href="#grid" aria-label="Close"></a>
     <div class="sheet">
 
       <div class="pane">
-        <ul class="visuals">
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
+        <ul class="roles">
+          <li class="role">
+            <h3>Elisava</h3>
+            <p class="org">Director · 20XX</p>
+            <p class="lead">Master in Strategic Design and Innovation.</p>
+          </li>
+          <li class="role">
+            <h3>BAU</h3>
+            <p class="org">Lecturer · 20XX</p>
+            <p class="lead">Master in Experience Design.</p>
+          </li>
+          <li class="role">
+            <h3>Massana</h3>
+            <p class="org">Academic advisor · 20XX</p>
+            <p class="lead">DHB and Barcelona Activa.</p>
+          </li>
+          <li class="role">
+            <h3>IED</h3>
+            <p class="org">Lecturer · 20XX</p>
+            <p class="lead">Master in Interaction Design.</p>
+          </li>
         </ul>
       </div>
 
       <aside class="side">
         <nav class="sidenav">
           <a href="#experience" aria-label="Previous">‹</a>
-          <a href="#bau" aria-label="Next">›</a>
+          <a href="#about" aria-label="Next">›</a>
           <a href="#grid" aria-label="Close">×</a>
         </nav>
-        <h2 id="elisava-h">Elisava</h2>
-        <p class="desc">Directing a master’s programme in strategic design and innovation.</p>
+        <h2 id="teaching-h">Teaching</h2>
+        <p class="desc">Directing, lecturing and advising on master’s programmes. Four schools.</p>
         <dl class="facts">
-          <dt>School</dt><dd>Elisava</dd>
-          <dt>Role</dt><dd>Director</dd>
-          <dt>Programme</dt><dd>Master in Strategic Design and Innovation</dd>
+          <dt>Schools</dt><dd>Elisava · BAU · Massana · IED</dd>
+          <dt>Roles</dt><dd>Director, lecturer, advisor</dd>
           <dt>When</dt><dd>20XX</dd>
         </dl>
       </aside>
 
     </div>
   </div>
-  <div class="modal" id="bau" role="dialog" aria-modal="true" aria-labelledby="bau-h">
+  <div class="modal" id="about" role="dialog" aria-modal="true" aria-labelledby="about-h">
     <a class="backdrop" href="#grid" aria-label="Close"></a>
     <div class="sheet">
 
       <div class="pane">
-        <ul class="visuals">
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-        </ul>
+        <div class="prose">
+          <p>Designer of products, teams and systems. Currently Design Manager at
+             Miro, working on core product experiences for collaboration at scale.
+             Before that, eight years at HP across product design, design systems
+             and advanced design.</p>
+          <p>A paragraph on how you work — what you look for in a problem, how you
+             decide, what you want from a team.</p>
+          <p>A paragraph on the rest of it — teaching, what you read, where you are.</p>
+        </div>
       </div>
 
       <aside class="side">
         <nav class="sidenav">
-          <a href="#elisava" aria-label="Previous">‹</a>
-          <a href="#massana" aria-label="Next">›</a>
-          <a href="#grid" aria-label="Close">×</a>
-        </nav>
-        <h2 id="bau-h">BAU</h2>
-        <p class="desc">Teaching on a master’s programme in experience design.</p>
-        <dl class="facts">
-          <dt>School</dt><dd>BAU</dd>
-          <dt>Role</dt><dd>Lecturer</dd>
-          <dt>Programme</dt><dd>Master in Experience Design</dd>
-          <dt>When</dt><dd>20XX</dd>
-        </dl>
-      </aside>
-
-    </div>
-  </div>
-  <div class="modal" id="massana" role="dialog" aria-modal="true" aria-labelledby="massana-h">
-    <a class="backdrop" href="#grid" aria-label="Close"></a>
-    <div class="sheet">
-
-      <div class="pane">
-        <ul class="visuals">
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-        </ul>
-      </div>
-
-      <aside class="side">
-        <nav class="sidenav">
-          <a href="#bau" aria-label="Previous">‹</a>
-          <a href="#ied" aria-label="Next">›</a>
-          <a href="#grid" aria-label="Close">×</a>
-        </nav>
-        <h2 id="massana-h">Massana</h2>
-        <p class="desc">Advising on the DHB and Barcelona Activa projects.</p>
-        <dl class="facts">
-          <dt>School</dt><dd>Massana</dd>
-          <dt>Role</dt><dd>Academic advisor</dd>
-          <dt>Projects</dt><dd>DHB, Barcelona Activa</dd>
-          <dt>When</dt><dd>20XX</dd>
-        </dl>
-      </aside>
-
-    </div>
-  </div>
-  <div class="modal" id="ied" role="dialog" aria-modal="true" aria-labelledby="ied-h">
-    <a class="backdrop" href="#grid" aria-label="Close"></a>
-    <div class="sheet">
-
-      <div class="pane">
-        <ul class="visuals">
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-        </ul>
-      </div>
-
-      <aside class="side">
-        <nav class="sidenav">
-          <a href="#massana" aria-label="Previous">‹</a>
-          <a href="#note-01" aria-label="Next">›</a>
-          <a href="#grid" aria-label="Close">×</a>
-        </nav>
-        <h2 id="ied-h">IED</h2>
-        <p class="desc">Teaching on a master’s programme in interaction design.</p>
-        <dl class="facts">
-          <dt>School</dt><dd>IED</dd>
-          <dt>Role</dt><dd>Lecturer</dd>
-          <dt>Programme</dt><dd>Master in Interaction Design</dd>
-          <dt>When</dt><dd>20XX</dd>
-        </dl>
-      </aside>
-
-    </div>
-  </div>
-  <div class="modal" id="note-01" role="dialog" aria-modal="true" aria-labelledby="note-01-h">
-    <a class="backdrop" href="#grid" aria-label="Close"></a>
-    <div class="sheet">
-
-      <div class="pane">
-        <ul class="visuals">
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-        </ul>
-      </div>
-
-      <aside class="side">
-        <nav class="sidenav">
-          <a href="#ied" aria-label="Previous">‹</a>
-          <a href="#note-02" aria-label="Next">›</a>
-          <a href="#grid" aria-label="Close">×</a>
-        </nav>
-        <h2 id="note-01-h">Note 01</h2>
-        <p class="desc">Something worth writing down.</p>
-        <dl class="facts">
-          <dt>Kind</dt><dd>Writing</dd>
-          <dt>When</dt><dd>20XX</dd>
-        </dl>
-      </aside>
-
-    </div>
-  </div>
-  <div class="modal" id="note-02" role="dialog" aria-modal="true" aria-labelledby="note-02-h">
-    <a class="backdrop" href="#grid" aria-label="Close"></a>
-    <div class="sheet">
-
-      <div class="pane">
-        <ul class="visuals">
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-          <li><figure><div class="frame" data-label="Visual"></div><figcaption>Caption</figcaption></figure></li>
-        </ul>
-      </div>
-
-      <aside class="side">
-        <nav class="sidenav">
-          <a href="#note-01" aria-label="Previous">‹</a>
+          <a href="#teaching" aria-label="Previous">‹</a>
           <a href="#now" aria-label="Next">›</a>
           <a href="#grid" aria-label="Close">×</a>
         </nav>
-        <h2 id="note-02-h">Note 02</h2>
-        <p class="desc">Something worth writing down.</p>
+        <h2 id="about-h">About</h2>
+        <p class="desc">The longer version of the Info column.</p>
         <dl class="facts">
-          <dt>Kind</dt><dd>Writing</dd>
-          <dt>When</dt><dd>20XX</dd>
+          <dt>Based</dt><dd>Barcelona</dd>
+          <dt>Now</dt><dd>Design Manager, Miro</dd>
+          <dt>Email</dt><dd><a href="mailto:martadomingorod@gmail.com">martadomingorod@gmail.com</a></dd>
         </dl>
       </aside>
 

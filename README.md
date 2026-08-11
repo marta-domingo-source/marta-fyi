@@ -37,8 +37,10 @@ the same stack. So `Arial, Helvetica, sans-serif` *is* the look — nothing to d
 | Radius | 3px |
 | Grid | four columns, `gap: 20px` |
 
-In Are.na the red and green mark channel privacy. Here they mark category: green for
-Writing, red for Teaching, default for everything else.
+In Are.na the red and green mark channel privacy. Here red marks a card that isn't quite like
+its neighbours — currently just Teaching, which shares the experience section with Experience
+but reads as a different kind of thing. It's keyed off `data-accent` on the `<li>`, not
+`data-sec`, so accent and section can diverge. Green is unused.
 
 The header is just the name. The `More` disclosure holds LinkedIn, GitHub and CV.
 
@@ -142,16 +144,20 @@ supersedes the PDF CV in places: the 2019–2023 role is **Senior Product Design
 "Product Design Lead", and several bullets are reworded. Take this file as the source of
 truth over the PDF.
 
-The same treatment would suit Teaching, which is currently four separate squares.
+Teaching now gets the same treatment: one square, four schools listed in the pane, reusing
+the `.roles` markup rather than a second set of rules.
 
 ## Current options
 
-**View** — All · Currently · Projects · Experience · Teaching · Writing
+**View** — All · Currently · Projects · Experience · About
 
 **Order** — Featured (document order) · Newest first · Oldest first · Alphabetical · Random
 
-Featured runs: Now, then projects, then experience, then teaching, then writing — what's true
-today, then the work, then the record, then the thinking.
+Featured runs: Now, then projects, then Experience, then Teaching, then About — what's true
+today, then the work, then the record, then the person.
+
+Teaching is deliberately **not** a View option. It sits in the experience section, so
+`View → Experience` shows both squares. Writing was removed entirely.
 
 Random reshuffles every time you click it, not just on load.
 
@@ -174,9 +180,10 @@ Contrast is checked numerically, both schemes.
 
 ## State
 
-Eleven squares. Real content: the Info column (though Barcelona is inferred, not stated), the
-Experience square and its full five-role pop-up, and the four Teaching squares. Placeholder:
-three projects, two notes, the Now card, those pop-up bodies, and the LinkedIn and CV links.
+Seven squares. Real content: the Info column (though Barcelona is inferred, not stated), the
+Experience square and its full five-role pop-up, and the Teaching square's four schools.
+Placeholder: three projects, the Now card, those pop-up bodies, two of the three About
+paragraphs, and the LinkedIn, GitHub and CV links.
 **`20XX` means there is no date for it yet** — those cards still sort correctly, but the shown
 date is a slot.
 
